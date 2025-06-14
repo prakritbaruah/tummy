@@ -116,14 +116,6 @@ export default function BowelScreen() {
               <Text variant="bodyMedium">
                 {entry.bloodPresent ? 'Blood Present' : 'No Blood'}
               </Text>
-              <Text variant="bodyMedium">
-                {new Date(entry.timestamp).toLocaleString()}
-              </Text>
-              {entry.notes && (
-                <Text variant="bodySmall" style={styles.notes}>
-                  {entry.notes}
-                </Text>
-              )}
             </Card.Content>
           </Card>
         ))}
