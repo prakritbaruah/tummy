@@ -11,7 +11,6 @@ export default function BowelScreen() {
   const [timing, setTiming] = useState<Timing>('morning');
   const [mucusPresent, setMucusPresent] = useState(false);
   const [bloodPresent, setBloodPresent] = useState(false);
-  const [notes, setNotes] = useState('');
   
   const dispatch = useAppDispatch();
   const bowelEntries = useAppSelector((state) => state.bowel.entries);

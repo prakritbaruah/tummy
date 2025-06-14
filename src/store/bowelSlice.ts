@@ -4,13 +4,12 @@ export type Timing = 'morning' | 'afternoon' | 'evening';
 
 export interface BowelEntry {
   id: string;
+  timing: Timing;
   urgency: number;      // 1-5 scale
   consistency: number;  // 1-7 scale
-  timing: Timing;
   mucusPresent: boolean;
   bloodPresent: boolean;
   timestamp: number;
-  notes?: string;
 }
 
 export interface BowelState {
