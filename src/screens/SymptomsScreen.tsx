@@ -58,22 +58,24 @@ export default function SymptomsScreen() {
     );
   };
 
+  const handleAddAllSymptoms = () => {
+    symptomInputs.forEach(input => {
+      const newEntry: SymptomEntry = {
+        ...input,
+        id: Date.now().toString() + input.name,
+        timestamp: Date.now(),
+      };
+      dispatch(addSymptomEntry(newEntry));
+    });
+    
+    // Clear all selections
+    setSelectedSymptoms([]);
+    setSymptomInputs([]);
+  };
+
   const getSeverityValue = (severity: Severity): number => {
     const severityLevels: Severity[] = ['low', 'mild', 'moderate', 'high', 'severe'];
     return severityLevels.indexOf(severity) / (severityLevels.length - 1);
-  };
-
-  const handleAddSymptom = (input: SymptomData) => {
-    const newEntry: SymptomEntry = {
-      ...input,
-      id: Date.now().toString() + input.name,
-      timestamp: Date.now(),
-    };
-    dispatch(addSymptomEntry(newEntry));
-    
-    // Remove the symptom from both selected and inputs
-    setSelectedSymptoms(prev => prev.filter(s => s !== input.name));
-    setSymptomInputs(prev => prev.filter(i => i.name !== input.name));
   };
 
   return (
@@ -146,17 +148,19 @@ export default function SymptomsScreen() {
                 {input.severity.charAt(0).toUpperCase() + input.severity.slice(1)}
               </Text>
             </View>
-
-            <Button 
-              mode="contained" 
-              onPress={() => handleAddSymptom(input)}
-              style={styles.button}
-            >
-              Add {input.name}
-            </Button>
           </Card.Content>
         </Card>
       ))}
+
+      {symptomInputs.length > 0 && (
+        <Button 
+          mode="contained" 
+          onPress={handleAddAllSymptoms}
+          style={styles.addAllButton}
+        >
+          Add Symptoms
+        </Button>
+      )}
 
       {symptomEntries.map((entry) => (
         <Card key={entry.id} style={styles.entryCard}>
@@ -239,13 +243,6 @@ const styles = StyleSheet.create({
   segmentedButtons: {
     marginBottom: 16,
   },
-  button: {
-    marginTop: 8,
-  },
-  entryCard: {
-    marginBottom: 8,
-    elevation: 1,
-  },
   sliderContainer: {
     marginBottom: 16,
     paddingHorizontal: 8,
@@ -263,5 +260,13 @@ const styles = StyleSheet.create({
     marginTop: 8,
     color: '#1976d2',
     fontWeight: '500',
+  },
+  addAllButton: {
+    marginTop: 8,
+    marginBottom: 24,
+  },
+  entryCard: {
+    marginBottom: 8,
+    elevation: 1,
   },
 }); 
