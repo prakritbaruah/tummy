@@ -10,6 +10,7 @@ import HomeScreen from './src/screens/HomeScreen';
 import FoodLogScreen from './src/screens/FoodLogScreen';
 import SymptomsScreen from './src/screens/SymptomsScreen';
 import AnalyticsScreen from './src/screens/AnalyticsScreen';
+import BowelScreen from './src/screens/BowelScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -38,6 +39,13 @@ export default function App() {
               component={SymptomsScreen}
               options={{
                 title: 'Symptoms'
+              }}
+            />
+            <Tab.Screen 
+              name="Bowel" 
+              component={BowelScreen}
+              options={{
+                title: 'Bowel'
               }}
             />
             <Tab.Screen 

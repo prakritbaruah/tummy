@@ -19,30 +19,40 @@ export default function BowelScreen() {
   const handleAddEntry = () => {
     const newEntry: BowelEntry = {
       id: Date.now().toString(),
+      timing,
       urgency,
       consistency,
-      timing,
       mucusPresent,
       bloodPresent,
       timestamp: Date.now(),
-      notes: notes.trim() || undefined,
     };
     dispatch(addBowelEntry(newEntry));
     
     // Reset form
-    setUrgency(3);
+    setUrgency(0);
     setConsistency(4);
     setTiming('morning');
     setMucusPresent(false);
     setBloodPresent(false);
-    setNotes('');
   };
 
   return (
     <View style={styles.container}>
       <Card style={styles.inputCard}>
         <Card.Content>
-          <Text variant="titleMedium" style={styles.label}>Urgency (1-5)</Text>
+        <Text variant="titleMedium" style={styles.label}>Timing</Text>
+          <SegmentedButtons
+            value={timing}
+            onValueChange={value => setTiming(value as Timing)}
+            buttons={[
+              { value: 'morning', label: 'Morning' },
+              { value: 'afternoon', label: 'Afternoon' },
+              { value: 'evening', label: 'Evening' },
+            ]}
+            style={styles.segmentedButtons}
+          />
+
+          <Text variant="titleMedium" style={styles.label}>Urgency</Text>
           <Text style={styles.value}>{urgency}</Text>
           <Slider
             value={urgency}
@@ -53,7 +63,7 @@ export default function BowelScreen() {
             style={styles.slider}
           />
 
-          <Text variant="titleMedium" style={styles.label}>Consistency (1-7)</Text>
+          <Text variant="titleMedium" style={styles.label}>Consistency</Text>
           <Text style={styles.value}>{consistency}</Text>
           <Slider
             value={consistency}
@@ -62,18 +72,6 @@ export default function BowelScreen() {
             maximumValue={7}
             step={1}
             style={styles.slider}
-          />
-
-          <Text variant="titleMedium" style={styles.label}>Timing</Text>
-          <SegmentedButtons
-            value={timing}
-            onValueChange={value => setTiming(value as Timing)}
-            buttons={[
-              { value: 'morning', label: 'Morning' },
-              { value: 'afternoon', label: 'Afternoon' },
-              { value: 'evening', label: 'Evening' },
-            ]}
-            style={styles.segmentedButtons}
           />
 
           <View style={styles.checkboxContainer}>
@@ -92,14 +90,6 @@ export default function BowelScreen() {
               Blood Present
             </Button>
           </View>
-
-          <TextInput
-            label="Notes (optional)"
-            value={notes}
-            onChangeText={setNotes}
-            style={styles.input}
-            multiline
-          />
 
           <Button mode="contained" onPress={handleAddEntry} style={styles.button}>
             Add Entry
