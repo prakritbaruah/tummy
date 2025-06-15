@@ -7,6 +7,7 @@ import { FoodEntry } from '../types/food';
 
 export default function FoodLogScreen() {
   const [showTextInput, setShowTextInput] = useState(false);
+  const [showMicrophoneText, setShowMicrophoneText] = useState(false);
   const [foodText, setFoodText] = useState('');
   const dispatch = useAppDispatch();
 
@@ -14,16 +15,19 @@ export default function FoodLogScreen() {
     // TODO: Implement camera functionality
     console.log('Camera pressed');
     setShowTextInput(false);
+    setShowMicrophoneText(false);
   };
 
   const handleMicrophonePress = () => {
     // TODO: Implement microphone functionality
     console.log('Microphone pressed');
+    setShowMicrophoneText(true);
     setShowTextInput(false);
   };
 
   const handleWritingPress = () => {
     setShowTextInput(true);
+    setShowMicrophoneText(false);
   };
 
   const handleBarcodePress = () => {
@@ -49,7 +53,7 @@ export default function FoodLogScreen() {
   return (
     <View style={styles.container}>
       <Text variant="headlineMedium" style={styles.heading}>
-        Eat or drink anything today?
+        Track your meals
       </Text>
       <View style={styles.buttonRow}>
         <Button
@@ -78,10 +82,18 @@ export default function FoodLogScreen() {
         </Button>
       </View>
 
+      {showMicrophoneText && (
+        <View style={styles.explanationContainer}>
+          <Text variant="bodyMedium" style={styles.explanationText}>
+            Speak naturally about what you ate and drank today and our AI will do the rest.
+          </Text>
+        </View>
+      )}
+
       {showTextInput && (
         <View style={styles.inputContainer}>
           <TextInput
-            placeholder="Write naturally about your meals and our AI will do the rest..."
+            placeholder="Write naturally about what you ate and drank today and our AI will do the rest."
             value={foodText}
             onChangeText={setFoodText}
             style={styles.textInput}
@@ -119,6 +131,19 @@ const styles = StyleSheet.create({
   button: {
     flex: 1,
     marginHorizontal: 8,
+  },
+  explanationContainer: {
+    marginTop: 20,
+    padding: 16,
+    backgroundColor: '#e3f2fd',
+    borderRadius: 8,
+    borderLeftWidth: 4,
+    borderLeftColor: '#1976d2',
+  },
+  explanationText: {
+    color: '#1976d2',
+    textAlign: 'center',
+    fontStyle: 'italic',
   },
   inputContainer: {
     marginTop: 20,

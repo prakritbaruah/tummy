@@ -76,6 +76,9 @@ export default function SymptomsScreen() {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+      <Text variant="headlineMedium" style={styles.heading}>
+        Track your symptoms
+      </Text>
       <Text variant="titleMedium" style={styles.label}>Select Symptoms</Text>
       <View style={styles.checklist}>
         {SYMPTOMS.map((symptom) => (
@@ -166,6 +169,11 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     padding: 16,
+  },
+  heading: {
+    marginBottom: 24,
+    textAlign: 'center',
+    color: '#1a1a1a',
   },
   symptomCard: {
     marginBottom: 16,

@@ -49,6 +49,9 @@ export default function BowelScreen() {
 
   return (
     <View style={styles.container}>
+      <Text variant="headlineMedium" style={styles.heading}>
+        Track your movements
+      </Text>
       <Text variant="titleMedium" style={styles.label}>Timing</Text>
       <SegmentedButtons
         value={timing}
@@ -134,6 +137,11 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     backgroundColor: '#f5f5f5',
+  },
+  heading: {
+    marginBottom: 24,
+    textAlign: 'center',
+    color: '#1a1a1a',
   },
   label: {
     marginBottom: 8,
