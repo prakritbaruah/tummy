@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { Provider as StoreProvider } from 'react-redux';
 import { store } from './src/store';
@@ -11,51 +12,81 @@ import FoodLogScreen from './src/screens/FoodLogScreen';
 import SymptomsScreen from './src/screens/SymptomsScreen';
 import BowelScreen from './src/screens/BowelScreen';
 import DailyLogScreen from './src/screens/DailyLogScreen';
+import AddScreen from './src/screens/AddScreen';
 
 const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
+
+function TabNavigator() {
+  return (
+    <Tab.Navigator>
+      <Tab.Screen 
+        name="Home" 
+        component={HomeScreen}
+        options={{
+          title: 'Home',
+        }}
+      />
+      <Tab.Screen 
+        name="Add" 
+        component={AddScreen}
+        options={{
+          title: 'Add',
+        }}
+        listeners={({ navigation }) => ({
+          tabPress: (e) => {
+            e.preventDefault();
+            navigation.navigate('AddModal');
+          },
+        })}
+      />
+      <Tab.Screen 
+        name="DailyLog" 
+        component={DailyLogScreen}
+        options={{
+          title: 'Daily Log',
+        }}
+      />
+    </Tab.Navigator>
+  );
+}
 
 export default function App() {
   return (
     <StoreProvider store={store}>
       <PaperProvider>
         <NavigationContainer>
-          <Tab.Navigator>
-            <Tab.Screen 
-              name="Home" 
-              component={HomeScreen}
-              options={{
-                title: 'Home'
+          <Stack.Navigator>
+            <Stack.Screen 
+              name="Main" 
+              component={TabNavigator}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen 
+              name="AddModal" 
+              component={AddScreen}
+              options={{ 
+                presentation: 'transparentModal',
+                headerShown: false,
+                animation: 'slide_from_bottom'
               }}
             />
-            <Tab.Screen 
+            <Stack.Screen 
               name="FoodLog" 
               component={FoodLogScreen}
-              options={{
-                title: 'Food Log'
-              }}
+              options={{ title: 'Add Meal' }}
             />
-            <Tab.Screen 
+            <Stack.Screen 
               name="Symptoms" 
               component={SymptomsScreen}
-              options={{
-                title: 'Symptoms'
-              }}
+              options={{ title: 'Add Symptoms' }}
             />
-            <Tab.Screen 
+            <Stack.Screen 
               name="Bowel" 
               component={BowelScreen}
-              options={{
-                title: 'Bowel'
-              }}
+              options={{ title: 'Add Bowel Movement' }}
             />
-            <Tab.Screen 
-              name="DailyLog" 
-              component={DailyLogScreen}
-              options={{
-                title: 'Daily Log'
-              }}
-            />
-          </Tab.Navigator>
+          </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>
     </StoreProvider>
