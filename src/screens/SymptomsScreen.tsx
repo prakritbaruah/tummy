@@ -4,6 +4,7 @@ import { Text, Button, Card, SegmentedButtons, useTheme } from 'react-native-pap
 import Slider from '@react-native-community/slider';
 import { useAppDispatch, useAppSelector } from '../store';
 import { addSymptomEntry } from '../store/symptomsSlice';
+import { useNavigation } from '@react-navigation/native';
 import { Timing } from '../types/common';
 import { 
   SYMPTOMS, 
@@ -18,6 +19,7 @@ export default function SymptomsScreen() {
   const theme = useTheme();
   
   const dispatch = useAppDispatch();
+  const navigation = useNavigation();
 
   const handleSymptomToggle = (symptom: string) => {
     setSelectedSymptoms(prev => {
@@ -67,6 +69,13 @@ export default function SymptomsScreen() {
     // Clear all selections
     setSelectedSymptoms([]);
     setSymptomInputs([]);
+    
+    // Reset navigation to Daily Log tab (no overlay)
+    // TODO: is this the best way to do this?
+    (navigation as any).reset({
+      index: 0,
+      routes: [{ name: 'Main', params: { screen: 'DailyLog' } }],
+    });
   };
 
   const getSeverityValue = (severity: Severity): number => {

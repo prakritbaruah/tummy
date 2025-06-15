@@ -4,6 +4,7 @@ import { Text, Button, Card, SegmentedButtons } from 'react-native-paper';
 import Slider from '@react-native-community/slider';
 import { useAppDispatch, useAppSelector } from '../store';
 import { addBowelEntry } from '../store/bowelSlice';
+import { useNavigation } from '@react-navigation/native';
 import { Timing } from '../types/common';
 import { BowelEntry, Urgency } from '../types/bowel';
 
@@ -15,6 +16,7 @@ export default function BowelScreen() {
   const [bloodPresent, setBloodPresent] = useState(false);
   
   const dispatch = useAppDispatch();
+  const navigation = useNavigation();
 
   const handleAddEntry = () => {
     const newEntry: BowelEntry = {
@@ -34,6 +36,12 @@ export default function BowelScreen() {
     setTiming('Morning');
     setMucusPresent(false);
     setBloodPresent(false);
+    
+    // Reset navigation to Daily Log tab (no overlay)
+    (navigation as any).reset({
+      index: 0,
+      routes: [{ name: 'Main', params: { screen: 'DailyLog' } }],
+    });
   };
 
   const getUrgencyValue = (urgency: Urgency): number => {

@@ -5,8 +5,6 @@ export const SYMPTOMS = [
   'Bloating',
   'Nausea',
   'Vomiting',
-  'Diarrhea',
-  'Constipation',
   'Gas',
   'Heartburn',
   'Loss of Appetite',
