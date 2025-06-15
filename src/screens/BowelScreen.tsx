@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
-import { Text, TextInput, Button, Card, SegmentedButtons } from 'react-native-paper';
+import { Text, Button, Card, SegmentedButtons } from 'react-native-paper';
 import Slider from '@react-native-community/slider';
 import { useAppDispatch, useAppSelector } from '../store';
-import { addBowelEntry, BowelEntry, Timing, Urgency } from '../store/bowelSlice';
+import { addBowelEntry } from '../store/bowelSlice';
+import { Timing } from '../types/common';
+import { BowelEntry, Urgency } from '../types/bowel';
 
 export default function BowelScreen() {
   const [urgency, setUrgency] = useState<Urgency>('low');
@@ -171,10 +173,6 @@ const styles = StyleSheet.create({
   label: {
     marginBottom: 8,
   },
-  value: {
-    textAlign: 'center',
-    marginBottom: 4,
-  },
   sliderContainer: {
     marginBottom: 16,
     paddingHorizontal: 8,
@@ -205,9 +203,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 4,
   },
-  input: {
-    marginBottom: 12,
-  },
   button: {
     marginTop: 8,
   },
@@ -216,9 +211,5 @@ const styles = StyleSheet.create({
   },
   entryCard: {
     marginBottom: 8,
-  },
-  notes: {
-    marginTop: 4,
-    fontStyle: 'italic',
   },
 }); 

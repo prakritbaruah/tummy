@@ -3,17 +3,14 @@ import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Text, Button, Card, SegmentedButtons, useTheme } from 'react-native-paper';
 import Slider from '@react-native-community/slider';
 import { useAppDispatch, useAppSelector } from '../store';
+import { addSymptomEntry } from '../store/symptomsSlice';
+import { Timing } from '../types/common';
 import { 
-  addSymptomEntry, 
   SYMPTOMS, 
-  Timing, 
   Severity, 
   SymptomData,
   SymptomEntry 
-} from '../store/symptomsSlice';
-
-// Omit id and timestamp as they're added when creating the entry
-type SymptomInput = Omit<SymptomData, 'id' | 'timestamp'>;
+} from '../types/symptoms';
 
 export default function SymptomsScreen() {
   const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([]);

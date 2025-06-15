@@ -1,15 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-export interface FoodEntry {
-  id: string;
-  name: string;
-  timestamp: number;
-  notes?: string;
-}
-
-export interface FoodState {
-  entries: FoodEntry[];
-}
+import { FoodEntry, FoodState } from '../types/food';
 
 const initialState: FoodState = {
   entries: [],

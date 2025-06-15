@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { Text, TextInput, Button, Card } from 'react-native-paper';
 import { useAppDispatch, useAppSelector } from '../store';
-import { addFoodEntry, FoodEntry } from '../store/foodSlice';
+import { addFoodEntry } from '../store/foodSlice';
+import { FoodEntry } from '../types/food';
 
 export default function FoodLogScreen() {
   const [foodName, setFoodName] = useState('');
+  const [quantity, setQuantity] = useState('');
   const [notes, setNotes] = useState('');
   const dispatch = useAppDispatch();
   const foodEntries = useAppSelector((state) => state.food.entries);
@@ -15,11 +17,13 @@ export default function FoodLogScreen() {
       const newEntry: FoodEntry = {
         id: Date.now().toString(),
         name: foodName.trim(),
+        quantity: quantity.trim() || '1 serving',
         timestamp: Date.now(),
         notes: notes.trim() || undefined,
       };
       dispatch(addFoodEntry(newEntry));
       setFoodName('');
+      setQuantity('');
       setNotes('');
     }
   };
@@ -33,6 +37,13 @@ export default function FoodLogScreen() {
             value={foodName}
             onChangeText={setFoodName}
             style={styles.input}
+          />
+          <TextInput
+            label="Quantity"
+            value={quantity}
+            onChangeText={setQuantity}
+            style={styles.input}
+            placeholder="e.g., 1 cup, 2 slices"
           />
           <TextInput
             label="Notes (optional)"
@@ -52,6 +63,7 @@ export default function FoodLogScreen() {
           <Card key={entry.id} style={styles.entryCard}>
             <Card.Content>
               <Text variant="titleMedium">{entry.name}</Text>
+              <Text variant="bodyMedium">Quantity: {entry.quantity}</Text>
               <Text variant="bodyMedium">
                 {new Date(entry.timestamp).toLocaleString()}
               </Text>
