@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 
 const { height: screenHeight } = Dimensions.get('window');
 
-const addScreenHeightRatio: number = 0.35;
+const addScreenHeightRatio: number = 0.37;
 
 export default function AddScreen() {
   const [slideAnim] = useState(new Animated.Value(screenHeight));
@@ -41,7 +41,7 @@ export default function AddScreen() {
   useEffect(() => {
     // Slide up animation when component mounts
     Animated.timing(slideAnim, {
-      toValue: screenHeight * 0.65, // Show panel at 60% from top (40% height)
+      toValue: screenHeight * (1 - addScreenHeightRatio),
       duration: 400,
       useNativeDriver: false,
     }).start();
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
   cardContent: {
     paddingHorizontal: 20,
     paddingTop: 24,
-    paddingBottom: 24, // Extra padding at bottom for tab bar clearance
+    paddingBottom: 32, // Extra padding at bottom for tab bar clearance
   },
   title: {
     textAlign: 'center',
