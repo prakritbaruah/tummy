@@ -2,7 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Provider as PaperProvider } from 'react-native-paper';
+import { Provider as PaperProvider, IconButton } from 'react-native-paper';
 import { Provider as StoreProvider } from 'react-redux';
 import { store } from './src/store';
 
@@ -25,6 +25,9 @@ function TabNavigator() {
         component={HomeScreen}
         options={{
           title: 'Home',
+          tabBarIcon: ({ color, size }) => (
+            <IconButton icon="home-outline" size={size} iconColor={color} />
+          ),
         }}
       />
       <Tab.Screen 
@@ -32,6 +35,9 @@ function TabNavigator() {
         component={AddScreen}
         options={{
           title: 'Add',
+          tabBarIcon: ({ color, size }) => (
+            <IconButton icon="plus" size={size} iconColor={color} />
+          ),
         }}
         listeners={({ navigation }) => ({
           tabPress: (e) => {
@@ -45,6 +51,9 @@ function TabNavigator() {
         component={DailyLogScreen}
         options={{
           title: 'Daily Log',
+          tabBarIcon: ({ color, size }) => (
+            <IconButton icon="clipboard-text-outline" size={size} iconColor={color} />
+          ),
         }}
       />
     </Tab.Navigator>
