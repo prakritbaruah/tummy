@@ -5,11 +5,10 @@ import { Provider as PaperProvider } from 'react-native-paper';
 import { Provider as StoreProvider } from 'react-redux';
 import { store } from './src/store';
 
-// Import screens (we'll create these next)
+// Import screens
 import HomeScreen from './src/screens/HomeScreen';
 import FoodLogScreen from './src/screens/FoodLogScreen';
 import SymptomsScreen from './src/screens/SymptomsScreen';
-import AnalyticsScreen from './src/screens/AnalyticsScreen';
 import BowelScreen from './src/screens/BowelScreen';
 
 const Tab = createBottomTabNavigator();
@@ -46,13 +45,6 @@ export default function App() {
               component={BowelScreen}
               options={{
                 title: 'Bowel'
-              }}
-            />
-            <Tab.Screen 
-              name="Analytics" 
-              component={AnalyticsScreen}
-              options={{
-                title: 'Analytics'
               }}
             />
           </Tab.Navigator>
