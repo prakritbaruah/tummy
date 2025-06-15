@@ -1,23 +1,51 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Animated, Dimensions } from 'react-native';
+import { View, StyleSheet, Animated, Dimensions, TouchableWithoutFeedback, PanResponder } from 'react-native';
 import { Button, Text, Card } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
 const { height: screenHeight } = Dimensions.get('window');
 
+const addScreenHeightRatio: number = 0.35;
+
 export default function AddScreen() {
   const [slideAnim] = useState(new Animated.Value(screenHeight));
   const navigation = useNavigation();
 
+  // Pan responder for swipe down to dismiss
+  const panResponder = PanResponder.create({
+    onMoveShouldSetPanResponder: (evt, gestureState) => {
+      // Only respond to vertical swipes down
+      return Math.abs(gestureState.dy) > Math.abs(gestureState.dx) && gestureState.dy > 0;
+    },
+    onPanResponderMove: (evt, gestureState) => {
+      // Update animation value based on gesture
+      if (gestureState.dy > 0) {
+        slideAnim.setValue(screenHeight * (1 - addScreenHeightRatio) + gestureState.dy);
+      }
+    },
+    onPanResponderRelease: (evt, gestureState) => {
+      // If swiped down enough, close the modal
+      if (gestureState.dy > 100 || gestureState.vy > 0.5) {
+        handleClose();
+      } else {
+        // Snap back to original position
+        Animated.timing(slideAnim, {
+          toValue: screenHeight * (1 - addScreenHeightRatio),
+          duration: 200,
+          useNativeDriver: false,
+        }).start();
+      }
+    },
+  });
+
   useEffect(() => {
     // Slide up animation when component mounts
     Animated.timing(slideAnim, {
-      toValue: screenHeight * 0.5, // Show panel at 30% from top
-      duration: 300,
+      toValue: screenHeight * 0.65, // Show panel at 60% from top (40% height)
+      duration: 400,
       useNativeDriver: false,
     }).start();
-  }, 
-  []);
+  }, []);
 
   const handleClose = () => {
     // Slide down animation before navigating back
@@ -47,13 +75,15 @@ export default function AddScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Background overlay */}
-      <View style={styles.overlay} />
+      {/* Background overlay - touchable to close */}
+      <TouchableWithoutFeedback onPress={handleClose}>
+        <View style={styles.overlay} />
+      </TouchableWithoutFeedback>
       
       {/* Sliding panel */}
-      <Animated.View style={[styles.panel, { top: slideAnim }]}>
+      <Animated.View style={[styles.panel, { top: slideAnim }]} {...panResponder.panHandlers}>
         <Card style={styles.card}>
-          <Card.Content>
+          <Card.Content style={styles.cardContent}>
             <Text variant="headlineSmall" style={styles.title}>
               What would you like to add?
             </Text>
@@ -86,14 +116,6 @@ export default function AddScreen() {
                 Add Bowel Movement
               </Button>
             </View>
-            
-            <Button
-              mode="outlined"
-              onPress={handleClose}
-              style={styles.closeButton}
-            >
-              Cancel
-            </Button>
           </Card.Content>
         </Card>
       </Animated.View>
@@ -115,19 +137,27 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    height: screenHeight * 0.7,
+    height: screenHeight * addScreenHeightRatio,
     backgroundColor: 'transparent',
   },
   card: {
     flex: 1,
-    margin: 16,
+    marginHorizontal: 0, // Remove horizontal margins for full width
+    marginTop: 0,
+    marginBottom: 0,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
+    borderBottomLeftRadius: 0, // Remove bottom radius for full bottom coverage
+    borderBottomRightRadius: 0,
+  },
+  cardContent: {
+    paddingHorizontal: 20,
+    paddingTop: 24,
+    paddingBottom: 24, // Extra padding at bottom for tab bar clearance
   },
   title: {
     textAlign: 'center',
     marginBottom: 24,
-    color: '#1976d2',
   },
   buttonContainer: {
     gap: 16,
@@ -135,8 +165,5 @@ const styles = StyleSheet.create({
   },
   button: {
     paddingVertical: 8,
-  },
-  closeButton: {
-    marginTop: 8,
   },
 }); 
