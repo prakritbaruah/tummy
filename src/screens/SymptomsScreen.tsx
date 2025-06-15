@@ -18,7 +18,6 @@ export default function SymptomsScreen() {
   const theme = useTheme();
   
   const dispatch = useAppDispatch();
-  const symptomEntries = useAppSelector((state) => state.symptoms.entries);
 
   const handleSymptomToggle = (symptom: string) => {
     setSelectedSymptoms(prev => {
@@ -30,8 +29,8 @@ export default function SymptomsScreen() {
         // Add new symptom input with default values
         setSymptomInputs(inputs => [...inputs, {
           name: symptom as typeof SYMPTOMS[number],
-          timing: 'morning',
-          severity: 'moderate'
+          timing: 'Morning',
+          severity: 'Moderate'
         }]);
         return [...prev, symptom];
       }
@@ -41,7 +40,7 @@ export default function SymptomsScreen() {
   const handleInputChange = (symptom: string, field: 'timing' | 'severity', value: Timing | Severity | number) => {
     if (field === 'severity' && typeof value === 'number') {
       // Convert slider value to severity level
-      const severityLevels: Severity[] = ['low', 'mild', 'moderate', 'high', 'severe'];
+      const severityLevels: Severity[] = ['Low', 'Mild', 'Moderate', 'High', 'Severe'];
       const index = Math.round(value * (severityLevels.length - 1));
       value = severityLevels[index];
     }
@@ -71,41 +70,37 @@ export default function SymptomsScreen() {
   };
 
   const getSeverityValue = (severity: Severity): number => {
-    const severityLevels: Severity[] = ['low', 'mild', 'moderate', 'high', 'severe'];
+    const severityLevels: Severity[] = ['Low', 'Mild', 'Moderate', 'High', 'Severe'];
     return severityLevels.indexOf(severity) / (severityLevels.length - 1);
   };
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-      <Card style={styles.inputCard}>
-        <Card.Content>
-          <Text variant="titleMedium" style={styles.label}>Select Symptoms</Text>
-          <View style={styles.checklist}>
-            {SYMPTOMS.map((symptom) => (
-              <TouchableOpacity 
-                key={symptom} 
-                style={[
-                  styles.checkboxRow,
-                  selectedSymptoms.includes(symptom) && styles.selectedRow
-                ]}
-                onPress={() => handleSymptomToggle(symptom)}
-              >
-                <Text 
-                  style={[
-                    styles.checkboxLabel,
-                    selectedSymptoms.includes(symptom) && styles.selectedText
-                  ]}
-                >
-                  {symptom}
-                </Text>
-                <Text style={styles.checkmark}>
-                  {selectedSymptoms.includes(symptom) ? '✓' : ''}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </Card.Content>
-      </Card>
+      <Text variant="titleMedium" style={styles.label}>Select Symptoms</Text>
+      <View style={styles.checklist}>
+        {SYMPTOMS.map((symptom) => (
+          <TouchableOpacity 
+            key={symptom} 
+            style={[
+              styles.checkboxRow,
+              selectedSymptoms.includes(symptom) && styles.selectedRow
+            ]}
+            onPress={() => handleSymptomToggle(symptom)}
+          >
+            <Text 
+              style={[
+                styles.checkboxLabel,
+                selectedSymptoms.includes(symptom) && styles.selectedText
+              ]}
+            >
+              {symptom}
+            </Text>
+            <Text style={styles.checkmark}>
+              {selectedSymptoms.includes(symptom) ? '✓' : ''}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
 
       {symptomInputs.map((input) => (
         <Card key={input.name} style={styles.symptomCard}>
@@ -159,22 +154,7 @@ export default function SymptomsScreen() {
         </Button>
       )}
 
-      {symptomEntries.map((entry) => (
-        <Card key={entry.id} style={styles.entryCard}>
-          <Card.Content>
-            <Text variant="titleMedium">{entry.name}</Text>
-            <Text variant="bodyMedium">
-              Timing: {entry.timing.charAt(0).toUpperCase() + entry.timing.slice(1)}
-            </Text>
-            <Text variant="bodyMedium">
-              Severity: {entry.severity.charAt(0).toUpperCase() + entry.severity.slice(1)}
-            </Text>
-            <Text variant="bodyMedium">
-              {new Date(entry.timestamp).toLocaleString()}
-            </Text>
-          </Card.Content>
-        </Card>
-      ))}
+
     </ScrollView>
   );
 }
@@ -186,10 +166,6 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     padding: 16,
-  },
-  inputCard: {
-    marginBottom: 16,
-    elevation: 2,
   },
   symptomCard: {
     marginBottom: 16,
@@ -261,9 +237,5 @@ const styles = StyleSheet.create({
   addAllButton: {
     marginTop: 8,
     marginBottom: 24,
-  },
-  entryCard: {
-    marginBottom: 8,
-    elevation: 1,
   },
 }); 

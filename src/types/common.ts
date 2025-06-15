@@ -1,5 +1,5 @@
 // Common types used across the application
-export type Timing = 'morning' | 'afternoon' | 'evening';
+export type Timing = 'Morning' | 'Afternoon' | 'Evening';
 
 // Base interface for all entries
 export interface BaseEntry {

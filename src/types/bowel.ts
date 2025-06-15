@@ -1,6 +1,6 @@
 import { BaseEntry, Timing } from './common';
 
-export type Urgency = 'low' | 'medium' | 'high';
+export type Urgency = 'Low' | 'Medium' | 'High';
 
 export interface BowelEntry extends BaseEntry {
   timing: Timing;

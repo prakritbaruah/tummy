@@ -1,20 +1,20 @@
 import { BaseEntry, Timing } from './common';
 
 export const SYMPTOMS = [
-  'abdominal pain',
-  'bloating',
-  'nausea',
-  'vomiting',
-  'diarrhea',
-  'constipation',
-  'gas',
-  'heartburn',
-  'loss of appetite',
-  'fatigue',
+  'Abdominal Pain',
+  'Bloating',
+  'Nausea',
+  'Vomiting',
+  'Diarrhea',
+  'Constipation',
+  'Gas',
+  'Heartburn',
+  'Loss of Appetite',
+  'Fatigue',
 ] as const;
 
 export type SymptomName = typeof SYMPTOMS[number];
-export type Severity = 'low' | 'mild' | 'moderate' | 'high' | 'severe';
+export type Severity = 'Low' | 'Mild' | 'Moderate' | 'High' | 'Severe';
 
 // Base type for symptom data
 export interface SymptomData {
