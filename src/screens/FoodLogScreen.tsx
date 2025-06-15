@@ -1,81 +1,101 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
-import { Text, TextInput, Button, Card } from 'react-native-paper';
-import { useAppDispatch, useAppSelector } from '../store';
+import { View, StyleSheet } from 'react-native';
+import { TextInput, Button, Card, Text } from 'react-native-paper';
+import { useAppDispatch } from '../store';
 import { addFoodEntry } from '../store/foodSlice';
 import { FoodEntry } from '../types/food';
 
 export default function FoodLogScreen() {
-  const [foodName, setFoodName] = useState('');
-  const [quantity, setQuantity] = useState('');
-  const [notes, setNotes] = useState('');
+  const [showTextInput, setShowTextInput] = useState(false);
+  const [foodText, setFoodText] = useState('');
   const dispatch = useAppDispatch();
-  const foodEntries = useAppSelector((state) => state.food.entries);
 
-  const handleAddFood = () => {
-    if (foodName.trim()) {
+  const handleCameraPress = () => {
+    // TODO: Implement camera functionality
+    console.log('Camera pressed');
+    setShowTextInput(false);
+  };
+
+  const handleMicrophonePress = () => {
+    // TODO: Implement microphone functionality
+    console.log('Microphone pressed');
+    setShowTextInput(false);
+  };
+
+  const handleWritingPress = () => {
+    setShowTextInput(true);
+  };
+
+  const handleBarcodePress = () => {
+    // TODO: Implement barcode scanning functionality
+    console.log('Barcode pressed');
+    setShowTextInput(false);
+  };
+
+  const handleSubmit = () => {
+    if (foodText.trim()) {
       const newEntry: FoodEntry = {
         id: Date.now().toString(),
-        name: foodName.trim(),
-        quantity: quantity.trim() || '1 serving',
+        name: foodText.trim(),
+        quantity: '1 serving',
         timestamp: Date.now(),
-        notes: notes.trim() || undefined,
       };
       dispatch(addFoodEntry(newEntry));
-      setFoodName('');
-      setQuantity('');
-      setNotes('');
+      setFoodText('');
+      setShowTextInput(false);
     }
   };
 
   return (
     <View style={styles.container}>
-      <Card style={styles.inputCard}>
-        <Card.Content>
+      <Text variant="headlineMedium" style={styles.heading}>
+        Eat or drink anything today?
+      </Text>
+      <View style={styles.buttonRow}>
+        <Button
+          icon="camera"
+          mode="contained"
+          onPress={handleCameraPress}
+          style={styles.button}
+        >
+          Camera
+        </Button>
+        <Button
+          icon="microphone"
+          mode="contained"
+          onPress={handleMicrophonePress}
+          style={styles.button}
+        >
+          Voice
+        </Button>
+        <Button
+          icon="pencil"
+          mode="contained"
+          onPress={handleWritingPress}
+          style={styles.button}
+        >
+          Text
+        </Button>
+      </View>
+
+      {showTextInput && (
+        <View style={styles.inputContainer}>
           <TextInput
-            label="Food Name"
-            value={foodName}
-            onChangeText={setFoodName}
-            style={styles.input}
-          />
-          <TextInput
-            label="Quantity"
-            value={quantity}
-            onChangeText={setQuantity}
-            style={styles.input}
-            placeholder="e.g., 1 cup, 2 slices"
-          />
-          <TextInput
-            label="Notes (optional)"
-            value={notes}
-            onChangeText={setNotes}
-            style={styles.input}
+            placeholder="Write naturally about your meals and our AI will do the rest..."
+            value={foodText}
+            onChangeText={setFoodText}
+            style={styles.textInput}
             multiline
           />
-          <Button mode="contained" onPress={handleAddFood} style={styles.button}>
-            Add Food Entry
+          <Button 
+            mode="contained" 
+            onPress={handleSubmit} 
+            style={styles.submitButton}
+          >
+            Submit
           </Button>
-        </Card.Content>
-      </Card>
-
-      <ScrollView style={styles.listContainer}>
-        {foodEntries.map((entry: FoodEntry) => (
-          <Card key={entry.id} style={styles.entryCard}>
-            <Card.Content>
-              <Text variant="titleMedium">{entry.name}</Text>
-              <Text variant="bodyMedium">Quantity: {entry.quantity}</Text>
-              <Text variant="bodyMedium">
-                {new Date(entry.timestamp).toLocaleString()}
-              </Text>
-              {entry.notes && (
-                <Text variant="bodySmall" style={styles.notes}>
-                  {entry.notes}
-                </Text>
-              )}
-            </Card.Content>
-          </Card>
-        ))}
-      </ScrollView>
+        </View>
+      )}
     </View>
   );
 }
@@ -86,23 +106,27 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#f5f5f5',
   },
-  inputCard: {
-    marginBottom: 16,
+  heading: {
+    marginBottom: 24,
+    textAlign: 'center',
+    color: '#1a1a1a',
   },
-  input: {
-    marginBottom: 12,
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 20,
   },
   button: {
-    marginTop: 8,
-  },
-  listContainer: {
     flex: 1,
+    marginHorizontal: 8,
   },
-  entryCard: {
-    marginBottom: 8,
+  inputContainer: {
+    marginTop: 20,
   },
-  notes: {
-    marginTop: 4,
-    fontStyle: 'italic',
+  textInput: {
+    marginBottom: 16,
+  },
+  submitButton: {
+    marginTop: 8,
   },
 }); 
