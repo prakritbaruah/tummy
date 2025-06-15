@@ -1,15 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export type Timing = 'morning' | 'afternoon' | 'evening';
+export type Urgency = 'low' | 'medium' | 'high';
 
 export interface BowelEntry {
   id: string;
+  timestamp: number;
   timing: Timing;
-  urgency: number;      // 1-5 scale
-  consistency: number;  // 1-7 scale
+  urgency: Urgency;
+  consistency: number;
   mucusPresent: boolean;
   bloodPresent: boolean;
-  timestamp: number;
 }
 
 export interface BowelState {

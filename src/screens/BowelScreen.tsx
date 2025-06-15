@@ -3,10 +3,10 @@ import { View, StyleSheet, ScrollView } from 'react-native';
 import { Text, TextInput, Button, Card, SegmentedButtons } from 'react-native-paper';
 import Slider from '@react-native-community/slider';
 import { useAppDispatch, useAppSelector } from '../store';
-import { addBowelEntry, BowelEntry, Timing } from '../store/bowelSlice';
+import { addBowelEntry, BowelEntry, Timing, Urgency } from '../store/bowelSlice';
 
 export default function BowelScreen() {
-  const [urgency, setUrgency] = useState(3);
+  const [urgency, setUrgency] = useState<Urgency>('low');
   const [consistency, setConsistency] = useState(4);
   const [timing, setTiming] = useState<Timing>('morning');
   const [mucusPresent, setMucusPresent] = useState(false);
@@ -28,18 +28,29 @@ export default function BowelScreen() {
     dispatch(addBowelEntry(newEntry));
     
     // Reset form
-    setUrgency(0);
+    setUrgency('low');
     setConsistency(4);
     setTiming('morning');
     setMucusPresent(false);
     setBloodPresent(false);
   };
 
+  const getUrgencyValue = (urgency: Urgency): number => {
+    const urgencyLevels: Urgency[] = ['low', 'medium', 'high'];
+    return urgencyLevels.indexOf(urgency) / (urgencyLevels.length - 1);
+  };
+
+  const getUrgencyFromValue = (value: number): Urgency => {
+    const urgencyLevels: Urgency[] = ['low', 'medium', 'high'];
+    const index = Math.round(value * (urgencyLevels.length - 1));
+    return urgencyLevels[index];
+  };
+
   return (
     <View style={styles.container}>
       <Card style={styles.inputCard}>
         <Card.Content>
-        <Text variant="titleMedium" style={styles.label}>Timing</Text>
+          <Text variant="titleMedium" style={styles.label}>Timing</Text>
           <SegmentedButtons
             value={timing}
             onValueChange={value => setTiming(value as Timing)}
@@ -52,26 +63,48 @@ export default function BowelScreen() {
           />
 
           <Text variant="titleMedium" style={styles.label}>Urgency</Text>
-          <Text style={styles.value}>{urgency}</Text>
-          <Slider
-            value={urgency}
-            onValueChange={setUrgency}
-            minimumValue={1}
-            maximumValue={5}
-            step={1}
-            style={styles.slider}
-          />
+          <View style={styles.sliderContainer}>
+            <View style={styles.sliderLabels}>
+              <Text variant="bodySmall">Low</Text>
+              <Text variant="bodySmall">High</Text>
+            </View>
+            <Slider
+              value={getUrgencyValue(urgency)}
+              onValueChange={(value) => setUrgency(getUrgencyFromValue(value))}
+              minimumValue={0}
+              maximumValue={1}
+              step={0.5}
+              style={styles.slider}
+              minimumTrackTintColor="#1976d2"
+              maximumTrackTintColor="#e0e0e0"
+              thumbTintColor="#1976d2"
+            />
+            <Text variant="bodyMedium" style={styles.currentValue}>
+              {urgency.charAt(0).toUpperCase() + urgency.slice(1)}
+            </Text>
+          </View>
 
           <Text variant="titleMedium" style={styles.label}>Consistency</Text>
-          <Text style={styles.value}>{consistency}</Text>
-          <Slider
-            value={consistency}
-            onValueChange={setConsistency}
-            minimumValue={1}
-            maximumValue={7}
-            step={1}
-            style={styles.slider}
-          />
+          <View style={styles.sliderContainer}>
+            <View style={styles.sliderLabels}>
+              <Text variant="bodySmall">Hard</Text>
+              <Text variant="bodySmall">Liquid</Text>
+            </View>
+            <Slider
+              value={consistency}
+              onValueChange={setConsistency}
+              minimumValue={1}
+              maximumValue={7}
+              step={1}
+              style={styles.slider}
+              minimumTrackTintColor="#1976d2"
+              maximumTrackTintColor="#e0e0e0"
+              thumbTintColor="#1976d2"
+            />
+            <Text variant="bodyMedium" style={styles.currentValue}>
+              Type {consistency}
+            </Text>
+          </View>
 
           <View style={styles.checkboxContainer}>
             <Button
@@ -101,13 +134,16 @@ export default function BowelScreen() {
           <Card key={entry.id} style={styles.entryCard}>
             <Card.Content>
               <Text variant="titleMedium">
-                {entry.timing.charAt(0).toUpperCase() + entry.timing.slice(1)}
+                Bowel movement
               </Text>
               <Text variant="bodyMedium">
-                Urgency: {entry.urgency}/5
+                Timing: {entry.timing.charAt(0).toUpperCase() + entry.timing.slice(1)}
               </Text>
               <Text variant="bodyMedium">
-                Consistency: {entry.consistency}/7
+                Urgency: {entry.urgency.charAt(0).toUpperCase() + entry.urgency.slice(1)}
+              </Text>
+              <Text variant="bodyMedium">
+                Consistency: Type {entry.consistency}
               </Text>
               <Text variant="bodyMedium">
                 {entry.mucusPresent ? 'Mucus Present' : 'No Mucus'}
@@ -139,8 +175,23 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 4,
   },
-  slider: {
+  sliderContainer: {
     marginBottom: 16,
+    paddingHorizontal: 8,
+  },
+  sliderLabels: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 4,
+  },
+  slider: {
+    height: 40,
+  },
+  currentValue: {
+    textAlign: 'center',
+    marginTop: 8,
+    color: '#1976d2',
+    fontWeight: '500',
   },
   segmentedButtons: {
     marginBottom: 16,
